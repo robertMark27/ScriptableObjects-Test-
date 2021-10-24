@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 056c5260517135d49adfc9522a55e63c, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
+  playerMaterial: {fileID: 2100000, guid: 2745a372aafbfa5448cb326011943fd6, type: 2}
   playerHealth: 100
-  playerSpeed: 5
+  playerSpeed: 3.5
+  playerJumpForce: 5
+  playerPosition: {x: -0.21521944, y: -0.5000001, z: 0}
