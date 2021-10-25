@@ -7,7 +7,7 @@ using System;
 public class PlayerScript : MonoBehaviour
 {
     //Player damage event.
-    public static event Action<float> DamagePlayer = delegate { };
+    public static event Action DamagePlayer;
 
     //All players data.
     public PlayerData player;
@@ -22,6 +22,9 @@ public class PlayerScript : MonoBehaviour
     private bool grounded;
     //Check if the player taking damage.
     private bool damaged;
+
+    //Shoot duration.
+    private float shootTimer;
 
     void Start()
     {
@@ -47,25 +50,14 @@ public class PlayerScript : MonoBehaviour
             //Jump control of the player.
             Jump();
         }
-    }
 
-    //Player movement.
-    void Movement()
-    {
-        //Get reference to the horizontal and vertical values.
-        float Xmovement = Input.GetAxis("Horizontal");
-
-        //Check if the player moving and multiply the horizontal value by player speed.
-        if(Xmovement != 0)
-            rb.velocity = new Vector3(Xmovement * player.playerSpeed, rb.velocity.y);
-    }
-
-    //Player jump.
-    void Jump()
-    {
-        float Ymovement = Input.GetAxis("Vertical");
-        if (grounded && Input.GetKeyDown(KeyCode.Space))
-            rb.velocity = new Vector3(rb.velocity.x, player.playerJumpForce);
+        shootTimer += Time.deltaTime;
+        if(Input.GetMouseButtonDown(0) && shootTimer >= 0.5)
+        {
+            Shoot();
+            shootTimer = 0;
+            print(MousePos());
+        }
     }
 
     //Player Collisions.
@@ -90,10 +82,47 @@ public class PlayerScript : MonoBehaviour
             dir = -dir.normalized;
             rb.AddForce(dir * 10, ForceMode.Impulse);
 
-            //Damage the player and playe the damage anomation.
-            DamagePlayer(20);
+            //Damage the player and play the damage animation.
+            DamagePlayer?.Invoke();
             StartCoroutine(PlayerDamageAnim());
         }
+    }
+
+    //Player movement.
+    void Movement()
+    {
+        //Get reference to the horizontal and vertical values.
+        float Xmovement = Input.GetAxis("Horizontal");
+
+        //Check if the player moving and multiply the horizontal value by player speed.
+        if (Xmovement != 0)
+            rb.velocity = new Vector3(Xmovement * player.playerSpeed, rb.velocity.y);
+    }
+
+    //Player jump.
+    void Jump()
+    {
+        float Ymovement = Input.GetAxis("Vertical");
+        if (grounded && Input.GetKeyDown(KeyCode.Space))
+            rb.velocity = new Vector3(rb.velocity.x, player.playerJumpForce);
+    }
+
+    //Player shoot.
+    private void Shoot()
+    {
+        //Instantiate a bullet.
+        GameObject bullet = Instantiate(player.bullet, transform.position, Quaternion.identity);
+        Rigidbody bulletRB = bullet.GetComponent<Rigidbody>();
+        bulletRB.velocity = new Vector3(player.playerBulletSpeed * MousePos(), bulletRB.velocity.y);
+    }
+
+    private float MousePos()
+    {
+        Vector3 pos = Input.mousePosition;
+        if (pos.x > 900)
+            return 1;
+        else
+            return -1;
     }
 
     //Player taking amage animation(Color change), and disable the movement.
