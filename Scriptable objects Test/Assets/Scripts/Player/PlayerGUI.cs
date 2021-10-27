@@ -11,12 +11,8 @@ public class PlayerGUI : MonoBehaviour
     //UI elements.
     public Image healthCircle;
     public Text healthText;
-
-    void Start()
-    {
-        //Reference the health slider to the veriable.
-        healthCircle = GetComponent<Image>();
-    }
+    public Slider waveTimeBreak;
+    public GameObject waveBreakPanell;
 
     void Update()
     {
@@ -25,5 +21,14 @@ public class PlayerGUI : MonoBehaviour
 
         //Show the health amount on the text.
         healthText.text = player.playerHealth.ToString();
+
+        //Active the wave time breake panel.
+        if (player.playerWaveBreak)
+        {
+            waveBreakPanell.SetActive(true);
+            waveTimeBreak.value = player.playerBreakTime / 100;
+        }
+        else
+            waveBreakPanell.SetActive(false);
     }
 }

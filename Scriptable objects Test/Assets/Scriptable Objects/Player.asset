@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 056c5260517135d49adfc9522a55e63c, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
-  playerMaterial: {fileID: 2100000, guid: 2745a372aafbfa5448cb326011943fd6, type: 2}
-  playerHealth: 0
+  playerHealth: 64
   playerSpeed: 3.5
   playerJumpForce: 5
   playerBulletSpeed: 10
-  playerPosition: {x: -8.052208, y: -0.2956366, z: 0}
+  playerBreakTime: 12.716624
+  playerWaveBreak: 1
+  playerMaterial: {fileID: 2100000, guid: 2745a372aafbfa5448cb326011943fd6, type: 2}
+  playerPosition: {x: -4.21499, y: 3.25, z: 0}
   bullet: {fileID: 1046756259974730995, guid: 97ec8944b72ac04488857b6ec9371834, type: 3}

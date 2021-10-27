@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    //Scriptable objects.
+    public PlayerData player;
+
     //Spawn prefabs.
     public GameObject PlayerPrefab;
     public GameObject[] Enemys;
@@ -18,6 +21,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private int waveNum;
     [SerializeField] private int killsToNextWave;
     private int addKills;
+    private float breakTime;
 
     private void Start()
     {
@@ -27,8 +31,24 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        if(GameObject.FindGameObjectWithTag("Enemy") == null)
-            WaveStart();
+        if (killsToNextWave == kills)
+        {
+            player.playerWaveBreak = true;
+            player.playerBreakTime -= Time.deltaTime * 5;
+        }
+
+        if(player.playerBreakTime <= 0)
+        {
+            player.playerWaveBreak = false;
+            player.playerBreakTime = 100;
+
+            addKills += 2;
+            waveNum++;
+            killsToNextWave += addKills;
+        }
+
+        WaveStart();
+
     }
 
     private void OnEnable()
@@ -69,13 +89,7 @@ public class GameController : MonoBehaviour
     //Wave start.
     private void WaveStart()
     {
-        if (GameObject.FindGameObjectWithTag("Enemy") == null)
+        if (GameObject.FindGameObjectWithTag("Enemy") == null && !player.playerWaveBreak)
             SpawnEnemy();
-        if (killsToNextWave == kills)
-        {
-            addKills += 2;
-            waveNum++;
-            killsToNextWave += addKills;
-        }
     }
 }

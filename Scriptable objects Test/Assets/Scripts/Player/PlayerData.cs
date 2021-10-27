@@ -8,6 +8,9 @@ public class PlayerData : ScriptableObject
     public float playerSpeed;
     public float playerJumpForce;
     public float playerBulletSpeed;
+    public float playerBreakTime;
+
+    public bool playerWaveBreak;
 
     //Player other data
     public Material playerMaterial;

@@ -17,18 +17,6 @@ public class PlayerBullet : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        /*
-        //Check if the bullet touches the ground.
-        if (collision.transform.tag == "Ground")
-        {
-            BulletDestroy();
-        }
-
-        //Check if the bullet touches the enemy.
-        if (collision.transform.tag == "Enemy")
-        {
-            BulletDestroy();
-        }*/
         BulletDestroy();
     }
 
