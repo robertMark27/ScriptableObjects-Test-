@@ -8,6 +8,7 @@ public class PlayerScript : MonoBehaviour
 {
     //Player damage event.
     public static event Action DamagePlayer;
+    public static event Action Playerkill;
 
     //All players data.
     public PlayerData player;
@@ -43,6 +44,7 @@ public class PlayerScript : MonoBehaviour
         //Write the player position to the player data scriptable object.
         player.playerPosition = transform.position;
 
+        //Player movement.
         if (!damaged)
         {
             //Movement control of the player.
@@ -51,13 +53,28 @@ public class PlayerScript : MonoBehaviour
             Jump();
         }
 
+        //Check if player health under 0.
+        if (player.playerHealth <= 0 || transform.position.y <= -4)
+            Playerkill?.Invoke();
+
+        //Shooting and shoot duration.
         shootTimer += Time.deltaTime;
         if(Input.GetMouseButtonDown(0) && shootTimer >= 0.5)
         {
             Shoot();
             shootTimer = 0;
-            print(MousePos());
         }
+
+    }
+
+    private void OnEnable()
+    {
+        //Subscribe a kill method to player kill event.
+        Playerkill += Kill;
+    }
+    private void OnDisable()
+    {
+        Playerkill -= Kill;
     }
 
     //Player Collisions.
@@ -78,7 +95,6 @@ public class PlayerScript : MonoBehaviour
         {
             //Calculate the hit direction and add force to the player in the oposite direction.
             Vector3 dir = collision.transform.position - transform.position;
-            print(collision.transform.position - transform.position);
             dir = -dir.normalized;
             rb.AddForce(dir * 10, ForceMode.Impulse);
 
@@ -116,6 +132,14 @@ public class PlayerScript : MonoBehaviour
         bulletRB.velocity = new Vector3(player.playerBulletSpeed * MousePos(), bulletRB.velocity.y);
     }
 
+    private void Kill()
+    {
+        player.playerMaterial.color = startColorOfThePlayer;
+        player.playerHealth = 0;
+        Destroy(gameObject);
+    }
+
+    //Detect mouse position to determin the shoot directiom.
     private float MousePos()
     {
         Vector3 pos = Input.mousePosition;

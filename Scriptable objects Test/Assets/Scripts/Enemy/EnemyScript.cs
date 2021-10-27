@@ -1,24 +1,28 @@
 using System.Collections;
-using System;
 using UnityEngine;
+using System;
+using UnityEngine.UI;
 
 public class EnemyScript : MonoBehaviour
 {
     //Enemy damage event.
-    public static event Action DamageEnemy;
-    
+    public static event Action EnemyKill;
+
+    //Enemy main object.
+    public GameObject EnemyMainObject;
+
     //Scriptable objects.
     public PlayerData player;
     public EnemyData enemy;
+
+    //Allowed distance.
+    public float followDistance;
 
     //Player start material color.
     private Color startColorOfTheEnemy;
 
     //Enemy's rigidbody.
     private Rigidbody rb;
-
-    //Allowed distance.
-    public float followDistance;
 
     //Enemy grounded.
     private bool grounded;
@@ -39,10 +43,20 @@ public class EnemyScript : MonoBehaviour
         //Get reference to enemy's rigidbody.
         rb = GetComponent<Rigidbody>();
 
+        //Write the position of the enemy to enemy scroptable object.
+        enemy.enemyPosition = transform.position;
+
         //Check if the player close to the enemy.
-        if(Vector3.Distance(player.playerPosition, transform.position) <= followDistance)
+        if (Vector3.Distance(player.playerPosition, transform.position) <= followDistance)
         {
             FollowPlayer(player.playerPosition);
+        }
+
+        //Check if enemy health under or equls 0.
+        if (enemy.enemyHealth <= 0 || transform.position.y <= -4)
+        {
+            EnemyKill?.Invoke();
+            Destroy(EnemyMainObject);
         }
     }
 
@@ -50,14 +64,15 @@ public class EnemyScript : MonoBehaviour
     {
         if(collision.transform.tag == "Bullet")
         {
+            //Reduse the health.
+            enemy.enemyHealth -= UnityEngine.Random.Range(10, 21);
+
             //Calculate the hit direction and add force to the player in the oposite direction.
             Vector3 dir = collision.transform.position - transform.position;
-            print(collision.transform.position - transform.position);
             dir = -dir.normalized;
             rb.AddForce(dir * 10, ForceMode.Impulse);
 
             //Damage the enemy and play the damage animation.
-            DamageEnemy?.Invoke();
             StartCoroutine(TakeDamageAnim());
         }
     }
@@ -76,15 +91,20 @@ public class EnemyScript : MonoBehaviour
     private void OnEnable()
     {
         PlayerScript.DamagePlayer += DamageThePlayer;
+
+        EnemyKill += Kill;
     }
     private void OnDisable()
     {
         PlayerScript.DamagePlayer -= DamageThePlayer;
+
+        EnemyKill += Kill;
     }
 
+    //Player damage.
     private void DamageThePlayer()
     {
-        player.playerHealth -= 20;
+        player.playerHealth -= UnityEngine.Random.Range(10, 21);
     }
 
     //Follow the player.
@@ -112,6 +132,12 @@ public class EnemyScript : MonoBehaviour
         {
             rb.velocity = new Vector3(rb.velocity.x, enemy.enemyjumpForce);
         }
+    }
+
+    //Enemy kill.
+    private void Kill()
+    {
+        enemy.enemyMaterial.color = startColorOfTheEnemy;
     }
 
     IEnumerator TakeDamageAnim()

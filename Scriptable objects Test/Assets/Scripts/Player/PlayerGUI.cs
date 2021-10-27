@@ -8,17 +8,22 @@ public class PlayerGUI : MonoBehaviour
     //All player's data.
     public PlayerData player;
 
-    public Slider healthSlider;
+    //UI elements.
+    public Image healthCircle;
+    public Text healthText;
 
     void Start()
     {
         //Reference the health slider to the veriable.
-        healthSlider = GetComponent<Slider>();
+        healthCircle = GetComponent<Image>();
     }
 
     void Update()
     {
         //Attach the player health to the slider.
-        healthSlider.value = player.playerHealth / 100;
+        healthCircle.fillAmount = player.playerHealth / 100;
+
+        //Show the health amount on the text.
+        healthText.text = player.playerHealth.ToString();
     }
 }

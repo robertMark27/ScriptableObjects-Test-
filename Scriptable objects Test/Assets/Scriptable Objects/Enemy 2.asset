@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 036bd1d5bf2308141905a7d590cc5e9c, type: 3}
-  m_Name: Enemy
+  m_Name: Enemy 2
   m_EditorClassIdentifier: 
   enemyHealth: 100
   enemySpeed: 2.5
   enemyjumpForce: 5
-  enemyMaterial: {fileID: 2100000, guid: 4c96b67591bd44547bcd9354873e3db9, type: 2}
-  enemyPosition: {x: -11.571686, y: -18.794449, z: 0}
+  enemyMaterial: {fileID: 2100000, guid: c775fb3f9c100c245b56e1e67c02a92e, type: 2}
+  enemyPosition: {x: 4.9999466, y: 3.25, z: 0}

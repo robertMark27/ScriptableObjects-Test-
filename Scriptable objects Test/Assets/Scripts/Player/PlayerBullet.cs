@@ -1,12 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerBullet : MonoBehaviour
 {
-    //Enemy data.
-    public EnemyData enemy;
-
     //Epload particle system.
     public ParticleSystem expload;
 
@@ -22,27 +17,21 @@ public class PlayerBullet : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
+        /*
         //Check if the bullet touches the ground.
         if (collision.transform.tag == "Ground")
         {
             BulletDestroy();
         }
-    }
-    private void OnEnable()
-    {
-        EnemyScript.DamageEnemy += EnemyDamage;
-    }
-    private void OnDisable()
-    {
-        EnemyScript.DamageEnemy -= EnemyDamage;
-    }
 
-    private void EnemyDamage()
-    {
-        enemy.enemyHealth -= 20;
-        print(enemy.enemyHealth);
+        //Check if the bullet touches the enemy.
+        if (collision.transform.tag == "Enemy")
+        {
+            BulletDestroy();
+        }*/
         BulletDestroy();
     }
+
     private void BulletDestroy()
     {
         //Instantiate expload particle effect.
